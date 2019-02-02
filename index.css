@@ -1,0 +1,77 @@
+/* IDs */
+
+#apod {
+  border-radius: 10px;
+  width: 70%;
+  max-width: 800px;
+  margin: 30px 0;
+}
+
+#copyright p {
+  margin: 0;
+}
+
+#custom-date {
+  background-color: #2d1cfc17;
+  border-radius: 20px;
+  margin: 20px auto;
+  padding: 10px;
+  width: 400px;
+}
+
+#custom-date-input {
+  width: 215px;
+  margin: 0 auto;
+}
+
+#date-error {
+  color: red;
+}
+
+#explanationDiv {
+  background-color: #2d1cfc17;
+  border-radius: 20px;
+  margin: 0 90px;;
+  padding: 20px;
+}
+
+#explanationDiv p {
+  margin: 0;
+}
+
+#error h3 {
+  color: #fc3b1c;
+}
+
+#name {
+  font-size: 5vw;
+  color: #033a92;
+  margin-top: 30px;
+}
+
+/* Page Header */
+
+#nav-title {
+  font-weight: 500;
+  margin: 0 auto;
+}
+
+/* Classes */
+
+.hidden {
+  display: none;
+}
+
+/* HTML Tags */
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: center;
+  margin: 0 auto;
+  width: 90%;
+}
+
+nav {
+  background-color: #fffffff7;
+  min-width: 700px;
+}
