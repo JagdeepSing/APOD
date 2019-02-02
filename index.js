@@ -86,6 +86,7 @@
 	 */
   function handleError(error) {
     $("apodDiv").classList.add("hidden");
+    $("custom-date").classList.add("hidden");
     $("error").classList.remove("hidden");
 		console.log(error);
   }
