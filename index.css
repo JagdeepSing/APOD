@@ -17,6 +17,11 @@
   margin: 20px auto;
   padding: 3%;
   width: 80%;
+  font-size: 2vw;
+}
+
+#custom-date h5 {
+  font-size: 3vw;
 }
 
 #custom-date-input {
