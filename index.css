@@ -45,8 +45,16 @@
   margin: 0;
 }
 
+#error {
+  background-color: #2d1cfc17;
+  border-radius: 20px;
+  margin: 0 5%;;
+  padding: 5%;
+}
+
 #error h3 {
   color: #fc3b1c;
+
 }
 
 #name {
