@@ -17,11 +17,11 @@
   margin: 20px auto;
   padding: 3%;
   width: 80%;
-  font-size: 2vw;
+  font-size: medium;
 }
 
 #custom-date h5 {
-  font-size: 3vw;
+  font-size: large;
 }
 
 #custom-date-input {
@@ -37,11 +37,11 @@
   background-color: #2d1cfc17;
   border-radius: 20px;
   margin: 0 5%;;
-  padding: 5%;
+  padding: 4%;
 }
 
 #explanationDiv p {
-  font-size: 2.8vw;
+  font-size: medium;
   margin: 0;
 }
 
