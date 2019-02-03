@@ -24,6 +24,7 @@
 
     $("name").innerText = title;
     $("apod").src = hdurl;
+		$("apod-link").href = hdurl;
     $("explanation").innerText = explanation;
     $("date").innerText = new Date(date).toUTCString().replace(" 00:00:00 GMT", "");
   }
