@@ -1,84 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
+(function() {
+	"use strict";
 
-  <head>
-    <title>Astronomy Picture of the Day</title>
-    <meta charset="UTF-8">
+  window.addEventListener('load', loadPage);
 
-    <!-- Used for site responsiveness to different sized screeens -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  const API_URL = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
 
-    <!-- site icon -->
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png">
+	/**
+	 *	Initializes page by calling API and getting the Astronomy Picture of the Day
+	 */
+  function loadPage() {
+    getTodayAPOD();
+    $("search").addEventListener("click", getCustomAPOD);
+  }
 
-    <!-- Bootstrap 4.2 -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  /**
+   *  from JSON data of Astronomy Image of the Day, displays on webpage
+   */
+  function displayImage(response) {
+    let title = response.title;
+    let date = response.date;
+    let explanation = response.explanation;
+    let hdurl = response.hdurl;
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Quicksand" rel="stylesheet">
+    $("name").innerText = title;
+    $("apod").src = hdurl;
+    $("explanation").innerText = explanation;
+    $("date").innerText = new Date(date).toUTCString().replace(" 00:00:00 GMT", "");
+  }
 
-    <link rel="stylesheet" href="index.css">
-    <script src="index.js"></script>
-  </head>
+	/**
+	 *	gets today's APOD as JSON data via GET request
+	 */
+	function getTodayAPOD() {
+    fetch(API_URL)
+      .then(checkStatus)
+      .then(JSON.parse)
+      .then(displayImage)
+      .catch(handleError);
+	}
 
-  <body>
+  /**
+   *  gets APOD for a inputted date
+   */
+  function getCustomAPOD() {
+    let date = $("input-date").value;
 
-    <nav class="navbar sticky-top">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png" alt="NASA logo" width="75px">
-      <h2 id="nav-title">Astronomy Picture Of The Day</h2>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png" alt="NASA logo" width="75px">
-    </nav>
+    let input_date = new Date(date);
+    let boundary = new Date("1995-06-16");
+    let today = new Date();
 
-    <div id="apodDiv">
-      <h1 id="name">Loading...</h1>
-      <h6 id="date">Loading...</h6>
-      <div id="pictureDiv">
-        <img id="apod" src="" alt="Astronomy Picture of The Day">
-      </div>
-      <div id="explanationDiv">
-        <p id="explanation">Loading...</p>
-      </div>
-    </div>
+    if ((input_date > boundary) && (input_date <= today)) {
+      $("date-error").classList.add("hidden");
+      let url = API_URL + "&date=" + date;
+      fetch(url)
+        .then(checkStatus)
+        .then(JSON.parse)
+        .then(displayImage)
+        .catch(handleError);
+    } else {
+      $("date-error").classList.remove("hidden");
+    }
+  }
 
-    <div id="custom-date">
-      <h5>Get Picture on Specific Date</h5>
-      <p>
-        Date must be between Jun 16, 1995 and Today.
-        <br>
-        <span id="date-error" class="hidden">Please enter a valid date.</span>
-      </p>
-      <div id="custom-date-input">
-        <div class="input-group input-group-sm mb-3">
-          <input id="input-date" type="date" class="form-control" min="1995-06-16" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-          <div class="input-group-append">
-            <button id="search" class="btn btn-outline-secondary" type="button">Search</button>
-          </div>
-        </div>
-      </div>
-    </div>
+	/**
+	 * Helper function to return the response's result text if successful, otherwise
+	 * returns the rejected Promise result with an error status and corresponding text
+	 * @param {object} response - response to check for success/error
+	 * @returns {object} - valid result text if response was successful, otherwise rejected
+	 *                     Promise result
+	 */
+	function checkStatus(response) {
+		 const OK = 200;
+		 const ERROR = 300;
+		 let responseText = response.text();
+		 if (response.status >= OK && response.status < ERROR || response.status === 0) {
+		    return responseText;
+		 } else {
+		    return responseText.then(Promise.reject.bind(Promise));
+	   }
+	}
 
-    <div id="error" class="hidden">
-      <h3>ERROR :(</h3>
-      <p id="errorMsg">
-        Error Loading the image. ¯\_(ツ)_/¯
-        <br>
-        Likely too many requests, try again tomorrow.
-        <br>
-        <br>
-        <button class="btn btn-outline-success" type="button" value="Refresh Page" onclick="window.location.reload()">
-          Refresh
-        </button>
-      </p>
-    </div>
+  /**
+	 *	Displays error message onto webpage
+	 *	@param {string} error, error message to display
+	 */
+  function handleError(error) {
+    $("apodDiv").classList.add("hidden");
+    $("custom-date").classList.add("hidden");
+    $("error").classList.remove("hidden");
+		console.log(error);
+  }
 
-    <div id="copyright">
-      <p>Image Credit: NASA APOD API</p>
-    </div>
+		/* ------------------------- Helper Functions  ------------------------- */
 
-    <!-- JavaScript Used by Bootstrap 4.2 -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+	/**
+	 * Returns the element that has the ID attribute with the specified value.
+	 * @param {string} id - element ID
+	 * @returns {object} DOM object associated with id.
+	 */
+	function $(id) {
+		return document.getElementById(id);
+	}
 
-  </body>
-</html>
+	/**
+	 * Returns the first element that matches the given CSS selector.
+	 * @param {string} query - CSS query selector.
+	 * @returns {object} The first DOM object matching the query.
+	 */
+	function qs(query) {
+		return document.querySelector(query);
+	}
+
+	/**
+	 * Returns the array of elements that match the given CSS selector.
+	 * @param {string} query - CSS query selector
+	 * @returns {object[]} array of DOM objects matching the query.
+	 */
+	function qsa(query) {
+		return document.querySelectorAll(query);
+	}
+})();
