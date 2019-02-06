@@ -1,6 +1,6 @@
 /* IDs */
 
-#apod {
+#apod-image, #apod-video {
   border-radius: 10px;
   width: 70%;
   max-width: 800px;

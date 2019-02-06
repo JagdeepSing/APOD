@@ -20,13 +20,28 @@
     let title = response.title;
     let date = response.date;
     let explanation = response.explanation;
-    let hdurl = response.hdurl;
+    let url = response.url;
+		let mediaType = response.media_type;
 
     $("name").innerText = title;
-    $("apod").src = hdurl;
-		$("apod-link").href = hdurl;
     $("explanation").innerText = explanation;
     $("date").innerText = new Date(date).toUTCString().replace(" 00:00:00 GMT", "");
+
+		if (mediaType == "image") {
+			$("apod-image").src = url;
+			$("apod-video").src = "";
+			$("apod-link").href = response.hdurl;
+
+			$("apod-video").classList.add("hidden");
+			$("apod-link").classList.remove("hidden");
+		} else {
+			$("apod-video").src = url;
+			$("apod-image").src = "";
+			$("apod-link").href = "";
+
+			$("apod-link").classList.add("hidden");
+			$("apod-video").classList.remove("hidden");
+		}
   }
 
 	/**
